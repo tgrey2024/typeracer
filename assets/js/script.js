@@ -86,6 +86,26 @@ document.addEventListener('DOMContentLoaded', function() {
         levelDisplay.textContent = difficultySelect.value.charAt(0).toUpperCase() + difficultySelect.value.slice(1);
     }
     
+    // Function to highlight typed words
+    function highlightTypedWords() {
+        const sampleText = sampleTextDiv.textContent;
+        const userText = userInput.value;
+        const sampleWords = sampleText.split(' ');
+        const userWords = userText.split(' ');
+
+        let highlightedText = '';
+        for (let i = 0; i < sampleWords.length; i++) {
+            if (userWords[i] === undefined) {
+                highlightedText += `<span>${sampleWords[i]}</span> `;
+            } else if (userWords[i] === sampleWords[i]) {
+                highlightedText += `<span style="color: blue;">${sampleWords[i]}</span> `;
+            } else {
+                highlightedText += `<span style="color: red;">${sampleWords[i]}</span> `;
+            }
+        }
+        sampleTextDiv.innerHTML = highlightedText.trim();
+    }
+
     // Function to initialize the page
     function initializePage() {
         userInput.disabled = true;
@@ -97,6 +117,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add event listener to update the text when the difficulty changes
     difficultySelect.addEventListener('change', updateSampleText);
+
+    // Add event listener to highlight typed words in real time
+    userInput.addEventListener('input', highlightTypedWords);
 
     // Initialize with a random text based on the default selected difficulty
     updateSampleText();
