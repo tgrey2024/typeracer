@@ -21,6 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get references to the select element and the sample text div
     const difficultySelect = document.getElementById('difficultySelect');
     const sampleTextDiv = document.getElementById('sample-text');
+    const startButton = document.getElementById('start-btn');
+    const stopButton = document.getElementById('stop-btn');
+    const userInput = document.getElementById('user-input');
+    const timeDisplay = document.getElementById('time');
+    const levelDisplay = document.getElementById('level');
+    const wpmDisplay = document.getElementById('wpm');
+
+    let startTime, endTime;
 
     // Function to get a random text from an array
     function getRandomText(textArray) {
@@ -35,9 +43,63 @@ document.addEventListener('DOMContentLoaded', function() {
         sampleTextDiv.textContent = selectedText;
     }
 
+    // Function to calculate WPM
+    function calculateWPM() {
+        const sampleText = sampleTextDiv.textContent;
+        const userText = userInput.value;
+        const sampleWords = sampleText.split(' ');
+        const userWords = userText.split(' ');
+
+        let correctWords = 0;
+        for (let i = 0; i < userWords.length; i++) {
+            if (userWords[i] === sampleWords[i]) {
+                correctWords++;
+            }
+        }
+
+        const timeTaken = (endTime - startTime) / 1000 / 60; // time in minutes
+        const wpm = Math.round(correctWords / timeTaken);
+        return wpm;
+    }
+
+   // Function to start the test
+    function startTest() {
+        startTime = new Date();
+        startButton.disabled = true;
+        stopButton.disabled = false;
+        userInput.disabled = false;
+        userInput.value = '';
+        userInput.focus();
+    }
+
+    // Function to stop the test
+    function stopTest() {
+        endTime = new Date();
+        const timeTaken = (endTime - startTime) / 1000;
+        timeDisplay.textContent = timeTaken.toFixed(2);
+        startButton.disabled = false;
+        stopButton.disabled = true;
+        userInput.disabled = true;
+
+        const wpm = calculateWPM();
+        wpmDisplay.textContent = wpm;
+        levelDisplay.textContent = difficultySelect.value.charAt(0).toUpperCase() + difficultySelect.value.slice(1);
+    }
+    
+    // Function to initialize the page
+    function initializePage() {
+        userInput.disabled = true;
+        updateSampleText();
+    }
+    // Add event listeners to buttons
+    startButton.addEventListener('click', startTest);
+    stopButton.addEventListener('click', stopTest);
+
     // Add event listener to update the text when the difficulty changes
     difficultySelect.addEventListener('change', updateSampleText);
 
     // Initialize with a random text based on the default selected difficulty
     updateSampleText();
+    // Initialize the page when it loads
+    initializePage();
 });
