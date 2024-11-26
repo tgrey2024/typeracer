@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Live site: TBC
+Live site: [https://tgrey2024.github.io/typeracer/](https://tgrey2024.github.io/typeracer/)
 
 ## Table of Contents
 - [User Experience Design](#user-experience-design)
