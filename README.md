@@ -1,4 +1,4 @@
-# Project 1: Individual Project: Sereniteen - Teenage Anxiety Guide <a id="top"/>
+# JS Project: TypeRacer <a id="top"/>
 
 ## Introduction
 
