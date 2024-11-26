@@ -21,14 +21,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get references to the select element and the sample text div
     const difficultySelect = document.getElementById('difficultySelect');
     const sampleTextDiv = document.getElementById('sample-text');
-    const startButton = document.getElementById('start-btn');
-    const stopButton = document.getElementById('stop-btn');
     const userInput = document.getElementById('user-input');
     const timeDisplay = document.getElementById('time');
     const levelDisplay = document.getElementById('level');
     const wpmDisplay = document.getElementById('wpm');
 
     let startTime, endTime;
+    let testStarted = false;
 
     // Function to get a random text from an array
     function getRandomText(textArray) {
@@ -65,8 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
    // Function to start the test
     function startTest() {
         startTime = new Date();
-        startButton.disabled = true;
-        stopButton.disabled = false;
+        testStarted = true;
         userInput.disabled = false;
         userInput.value = '';
         userInput.focus();
@@ -77,8 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
         endTime = new Date();
         const timeTaken = (endTime - startTime) / 1000;
         timeDisplay.textContent = timeTaken.toFixed(2);
-        startButton.disabled = false;
-        stopButton.disabled = true;
         userInput.disabled = true;
 
         const wpm = calculateWPM();
@@ -106,14 +102,18 @@ document.addEventListener('DOMContentLoaded', function() {
         sampleTextDiv.innerHTML = highlightedText.trim();
     }
 
+    // Function to handle keydown events
+    function handleKeydown(event) {
+        if (event.key === 'Enter') {
+            stopTest();
+        }
+    }
+
     // Function to initialize the page
     function initializePage() {
         userInput.disabled = true;
         updateSampleText();
     }
-    // Add event listeners to buttons
-    startButton.addEventListener('click', startTest);
-    stopButton.addEventListener('click', stopTest);
 
     // Add event listener to update the text when the difficulty changes
     difficultySelect.addEventListener('change', updateSampleText);
@@ -121,8 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listener to highlight typed words in real time
     userInput.addEventListener('input', highlightTypedWords);
 
-    // Initialize with a random text based on the default selected difficulty
-    updateSampleText();
+    // // Initialize with a random text based on the default selected difficulty
+    // updateSampleText();
+
     // Initialize the page when it loads
     initializePage();
 });
