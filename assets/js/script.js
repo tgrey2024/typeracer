@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const timeDisplay = document.getElementById('time');
     const levelDisplay = document.getElementById('level');
     const wpmDisplay = document.getElementById('wpm');
+    const retryButton = document.getElementById('retry-btn');
+    const instructionsButton = document.getElementById('instruction-btn');
+    const instructionsModal = document.getElementById('instructions-modal');
 
     let startTime, endTime;
     let testStarted = false;
@@ -66,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
         startTime = new Date();
         testStarted = true;
         userInput.disabled = false;
-        userInput.value = '';
         userInput.focus();
     }
 
@@ -109,10 +111,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Function to retry the test
+    function retryTest() {
+        testStarted = false;
+        timeDisplay.textContent = '0';
+        wpmDisplay.textContent = '0';
+        levelDisplay.textContent = '';
+        userInput.disabled = false;
+        userInput.value = '';
+        updateSampleText();
+        userInput.focus();
+    }
+
     // Function to initialize the page
     function initializePage() {
         userInput.disabled = true;
         updateSampleText();
+    }
+
+    // Function to show the instructions modal
+    function showInstructions() {
+        instructionsModal.style.display = 'block';
+    }
+
+    // Function to hide the instructions modal
+    function hideInstructions() {
+        instructionsModal.style.display = 'none';
     }
 
     // Add event listener to update the text when the difficulty changes
@@ -121,9 +145,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listener to highlight typed words in real time
     userInput.addEventListener('input', highlightTypedWords);
 
-    // // Initialize with a random text based on the default selected difficulty
-    // updateSampleText();
+    // Add event listener to handle keydown events
+    userInput.addEventListener('keydown', handleKeydown);
+    
+    // Add event listener to start the test when the user starts typing
+    userInput.addEventListener('input', function() {
+        if (!testStarted) {
+            startTest();
+        }
+    });
 
+    // Add event listener to retry the test
+    retryButton.addEventListener('click', retryTest);
+
+    // Add event listener to show the instructions modal
+    instructionsButton.addEventListener('click', showInstructions);
+
+    // Add event listener to hide the instructions modal when the close button is clicked
+    document.querySelector('.modal .close').addEventListener('click', hideInstructions);
+
+    // Initialize with a random text based on the default selected difficulty
+    updateSampleText();
     // Initialize the page when it loads
     initializePage();
 });
