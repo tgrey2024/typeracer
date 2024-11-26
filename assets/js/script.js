@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to initialize the page
     function initializePage() {
-        userInput.disabled = true;
+        userInput.disabled = false;
         updateSampleText();
     }
 
